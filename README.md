@@ -1,6 +1,8 @@
 purectypes
 ==========
 
+![Python package](https://github.com/aguinet/purectypes/workflows/Python%20package/badge.svg)
+
 PureCTypes is a pure-python package to describe **portable** C structures.
 
 Why not using ctypes?
