@@ -18,32 +18,7 @@ from collections import namedtuple, abc
 from enum import Enum
 
 from purectypes.types import Visitor
-
-class UnionValue(object):
-    def __init__(self, ty, data):
-        self._ty = ty
-        self._data = data
-
-    def __getattr__(self, n):
-        ty = getattr(self, "_ty")
-        attr_ty = ty.types.get(n, None)
-        if attr_ty is None:
-            raise KeyError("unknown attribute '%s'" % n)
-        data = getattr(self, "_data")
-        return unpack(attr_ty, data)
-
-    def __setattr__(self, n, v):
-        ty = getattr(self, "_ty")
-        attr_ty = ty.types.get(n, None)
-        if attr_ty is None:
-            raise KeyError("unknown attribute '%s'" % n)
-        setattr(self, "_data", pack(attr_ty, v))
-
-    def __repr__(self):
-        ty = getattr(self, "_ty")
-        data = getattr(self, "_data")
-        data = codecs.decode(codecs.encode(data,"hex"),"ascii").upper()
-        return "Union(%s, %s)" % (repr(ty), data)
+from purectypes.union_value import UnionValue
 
 def aligned_val(v, align):
     return ((v+align-1)//align)*align
