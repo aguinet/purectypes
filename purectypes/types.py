@@ -50,7 +50,7 @@ class VoidTy(TyBase):
     
 
 class StructTy(TyBase):
-    def __init__(self, fields, *args, **kwargs):
+    def __init__(self, fields = None, *args, **kwargs):
         super(StructTy, self).__init__(*args, **kwargs)
         self._fields = fields
 
@@ -94,7 +94,7 @@ class ArrayTy(TyBase):
     _elt_type = None
     _elt_count = 0
 
-    def __init__(self, elt_type, elt_count, *args, **kwargs):
+    def __init__(self, elt_type = None, elt_count = 0, *args, **kwargs):
         super(ArrayTy, self).__init__(*args, **kwargs)
         self._elt_type = elt_type
         self._elt_count = elt_count
@@ -109,7 +109,7 @@ class ArrayTy(TyBase):
         return repr(self.elt_type)+"[%d]" % self.elt_count
 
 class UnionTy(TyBase):
-    def __init__(self, types, *args, **kwargs):
+    def __init__(self, types = None, *args, **kwargs):
         super(UnionTy, self).__init__(*args, **kwargs)
         self._types = types
 
@@ -150,3 +150,6 @@ class Visitor:
         func = "visit_%s" % name
         func = getattr(self, func)
         return func(Ty, *args, **kwargs)
+
+def is_forwardable(ty):
+    return isinstance(ty, (StructTy, UnionTy))

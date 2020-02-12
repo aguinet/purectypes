@@ -26,7 +26,7 @@ class UnionValue():
             raise KeyError("unknown attribute '%s'" % n)
         data = getattr(self, "_data")
         from purectypes.unpack import unpack
-        return unpack(attr_ty, data)
+        return unpack(attr_ty, data[:attr_ty.size])
 
     def __setattr__(self, n, v):
         ty = self._ty

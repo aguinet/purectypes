@@ -18,7 +18,7 @@ import struct
 from purectypes.unpack import unpack
 from purectypes.types import ArrayTy, PointerTy
 
-from common import UI64, UI32, UI8, S0, S1, U0
+from common import UI64, UI32, UI8, S0, S1, U0, U1
 
 class TestUnpack(unittest.TestCase):
     def test_ui(self):
@@ -41,7 +41,7 @@ class TestUnpack(unittest.TestCase):
         O = unpack(ArrayTy(UI64, 4), Data)
         self.assertEqual(O, list(range(4)))
 
-    def test_union(self):
+    def test_union0(self):
         Ref = [0xAA, 0xBB, 0xCC, 0xDD]
         Data = struct.pack("<BBBB", *Ref)
         O = unpack(U0, Data)
@@ -51,6 +51,11 @@ class TestUnpack(unittest.TestCase):
         self.assertEqual(O.ip.c, 0xCC)
         self.assertEqual(O.ip.d, 0xDD)
         self.assertEqual(O.i32, 0xDDCCBBAA)
+
+    def test_union1(self):
+        Data = b"\xAA"*10
+        O = unpack(U1, Data)
+        self.assertEqual(O.ptr, 0xAAAAAAAAAAAAAAAA)
 
     def test_ptr(self):
         self.assertEqual(

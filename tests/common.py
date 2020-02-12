@@ -35,3 +35,8 @@ U0 = UnionTy(
     {"ip": SIpAddr, "i32": UI32,
      "ar": ArrayTy(UI8, 4, triple=triple, size=4, align=1)},
     "IpAddrEnum", triple, 4, 4)
+
+U1 = UnionTy(
+    {"ar":  ArrayTy(UI8, 10, triple=triple, size=10, align=1),
+     "ptr": PointerTy(UI8, "<Q", triple=triple, size=8, align=8)},
+    "U1", triple, 10, 8)
