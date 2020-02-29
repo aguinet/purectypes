@@ -19,6 +19,7 @@ from enum import Enum
 
 from purectypes.types import Visitor
 from purectypes.union_value import UnionValue
+from purectypes.struct_value import StructValue
 
 def aligned_val(v, align):
     return ((v+align-1)//align)*align
@@ -46,7 +47,7 @@ class Packer(Visitor):
         # namedtuple.  Something does not smell right here, I think we should
         # have a cleaner design here.
         # See https://bugs.python.org/issue7796
-        elif hasattr(data, "_fields"):
+        elif isinstance(data, StructValue) or hasattr(data, "_fields"):
             getval = lambda obj,v: getattr(obj,v)
         else:
             raise ValueError("a structure except a namedtuple or a mapping object")

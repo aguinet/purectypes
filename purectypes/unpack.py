@@ -14,11 +14,11 @@
 
 import struct
 import codecs
-from collections import namedtuple
 from enum import Enum
 
 from purectypes.types import Visitor
 from purectypes.union_value import UnionValue
+from purectypes.struct_value import StructValue
 
 class Unpacker(Visitor):
     def visit_BasicTy(self, ty, data):
@@ -28,8 +28,11 @@ class Unpacker(Visitor):
         size = eltty.size
         return [self.visit(eltty, data[i*size:(i+1)*size]) for i in range(ty._elt_count)]
     def visit_StructTy(self, ty, data):
-        retty = namedtuple(ty.name, ty.fields.keys())
-        return retty(**{name: unpack(f.type_, data[f.offset:f.offset+f.type_._size]) for name,f in ty._fields.items()})
+        CTy = type(ty.name, (StructValue,), {"__slots__": ty.fields.keys()})
+        Ret = CTy()
+        for name,f in ty._fields.items():
+            setattr(Ret, name, unpack(f.type_, data[f.offset:f.offset+f.type_._size]))
+        return Ret
     def visit_PointerTy(self, ty, data):
         return struct.unpack(ty.ptr_format, data)[0]
     def visit_EnumTy(self, ty, data):
