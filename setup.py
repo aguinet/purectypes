@@ -15,7 +15,7 @@
 from setuptools import setup
 
 setup(name = 'purectypes',
-    version = '0.1',
+    version = '0.2',
     description = 'pure-python C types packer/unpacker',
     author = 'Adrien Guinet',
     author_email = 'adrien@guinet.me',
